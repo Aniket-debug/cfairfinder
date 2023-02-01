@@ -19,41 +19,38 @@ async function find_AIR() {
 
     contestId = contestId.slice(0, l);
 
-    let response = await fetch("https://codeforces.com/api/contest.standings?contestId=" + contestId + "&from=1&count=700&showUnofficial=false");
-    response = await response.json();
-
-    if (response.status != "OK") {
-        if (response.status == "FAILED")
-            document.getElementById("out").innerHTML = response.comment;
-        else
-            document.getElementById("out").innerHTML = "Entered Link is not correct";
-        return;
-    }
-
-    let userinfo = "https://codeforces.com/api/user.info?handles=";
-
-    for (let user of response.result.rows)
-        userinfo += user.party.members[0].handle + ';';
-
-    response = await fetch(userinfo);
-    response = await response.json();
-
     let rank = 0;
-    for (let user of response.result) {
-        if (user.country === "India") {
-            rank++;
+
+    for (let i = 1; i <= 5000; i += 600) {
+        let response = await fetch("https://codeforces.com/api/contest.standings?contestId=" + contestId + "&from=" + i + "&count=600&showUnofficial=false");
+        response = await response.json();
+
+        let userinfo = "https://codeforces.com/api/user.info?handles=";
+
+        for (let user of response.result.rows)
+            userinfo += user.party.members[0].handle + ';';
+
+        response = await fetch(userinfo);
+        response = await response.json();
+
+        for (let user of response.result) {
+            if (user.country === "India") {
+                rank++;
+                if (user.handle == username) {
+                    document.getElementById("out").innerHTML = user.firstName + " Your AIR is: " + rank;
+                    return;
+                }
+            }
             if (user.handle == username) {
-                document.getElementById("out").innerHTML = user.firstName + " Your AIR is: " + rank;
+                if (user.country == undefined)
+                    document.getElementById("out").innerHTML = "Username you entered didn't mention his/her country";
+                else
+                    document.getElementById("out").innerHTML = "Username you entered is not from India";
                 return;
             }
+
         }
-        if (user.handle == username) {
-            if (user.country == undefined)
-                document.getElementById("out").innerHTML = "Username you entered didn't mention his/her country";
-            else
-                document.getElementById("out").innerHTML = "Username you entered is not from India";
-            return;
-        }
+
     }
 
     document.getElementById("out").innerHTML = "Not Found";
