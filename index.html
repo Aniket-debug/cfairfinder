@@ -1,67 +1,57 @@
-<!DOCTYPE html>
-<html>
+async function find_AIR() {
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-        CF AIR Finder
-    </title>
-    <link href="CFAir.css" rel="stylesheet">
-</head>
+    document.getElementById("out").innerHTML = "Loading..";
 
-<body>
-    <div class="frontpage">
-        <div class="fheading">
-            <h1>CodeForces All India Rank Finder</h1>
-            <h2>Get your All India Rank after the completion of CodeForces contests</h2>
-        </div>
-        <br>
-        <div class="input">
-            <label>
-                <h2>Enter Username:</h2>
-            </label>
-            <input placeholder="username" id="username" type="text">
-            <br>
-            <label>
-                <h2>Enter Contest Link:</h2>
-            </label>
-            <input placeholder="contest link" id="contest_id" type="tex">
-            <br>
-            <button id="find" onclick="find_AIR()"><b id="ft">Find AIR</b></button>
-            <h1 id="out">______</h1>
-        </div>
-    </div>
-    <br>
-    <div class="dis">
-        <h1>Disclaimers:</h1>
-        <ul>
-            <li>
-                <h2>If Finder returns "Not Found" then these might be the cases:</h2>
-                <ol>
-                    <li>
-                        <h3>entered user's Global Rank is Not under 700</h3>
-                    </li>
-                    <li>
-                        <h3>entered user did not participated in the contest</h3>
-                    </li>
-                </ol>
-            </li>
-        </ul>
-    </div>
-    <br>
-    <div class="connection">
-        <h1>
-            Contribute:<a href="https://github.com/Aniket-debug/cfairfinder" target="_blank"><img id="github"
-                    src="https://image.freepik.com/free-icon/github-logo-silhouette-in-a-square_318-54633.jpg"></a>
-        </h1>
-        <h1>
-            Connect:<a href="https://www.linkedin.com/in/aniket-agarwal-226a551b1/" target="_blank"><img id="linkedin"
-                    src="https://tse2.mm.bing.net/th?id=OIP.8IxSTRR_RjmMtUAT7nAT7gHaHa&pid=Api&P=0"></a>
-        </h1>
-    </div>
-    <script src="find.js"></script>
-</body>
+    let username = document.getElementById("username").value;
+    username = username.trim();
+    let contestId = document.getElementById("contest_id").value;
+    contestId = contestId.trim();
 
-</html>
+    if (contestId.slice(0, 31) != "https://codeforces.com/contest/") {
+        document.getElementById("out").innerHTML = "Entered Link is not correct";
+        return;
+    }
+    contestId = contestId.slice(31);
+
+    let l = 0;
+
+    while ('0' <= contestId[l] && contestId[l] <= '9') l++;
+
+    contestId = contestId.slice(0, l);
+
+    let rank = 0;
+
+    for (let i = 1; i <= 5000; i += 600) {
+        let response = await fetch("https://codeforces.com/api/contest.standings?contestId=" + contestId + "&from=" + i + "&count=600&showUnofficial=false");
+        response = await response.json();
+
+        let userinfo = "https://codeforces.com/api/user.info?handles=";
+
+        for (let user of response.result.rows)
+            userinfo += user.party.members[0].handle + ';';
+
+        response = await fetch(userinfo);
+        response = await response.json();
+
+        for (let user of response.result) {
+            if (user.country === "India") {
+                rank++;
+                if (user.handle == username) {
+                    document.getElementById("out").innerHTML = user.firstName + " Your AIR is: " + rank;
+                    return;
+                }
+            }
+            if (user.handle == username) {
+                if (user.country == undefined)
+                    document.getElementById("out").innerHTML = "Username you entered didn't mention his/her country";
+                else
+                    document.getElementById("out").innerHTML = "Username you entered is not from India";
+                return;
+            }
+
+        }
+
+    }
+
+    document.getElementById("out").innerHTML = "Not Found";
+}
