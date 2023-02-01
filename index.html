@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        CF AIR Finder
+    </title>
+    <link href="CFAir.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="frontpage">
+        <div class="fheading">
+            <h1>CodeForces All India Rank Finder</h1>
+            <h2>Get your All India Rank after the completion of CodeForces contests</h2>
+        </div>
+        <br>
+        <div class="input">
+            <label>
+                <h2>Enter Username:</h2>
+            </label>
+            <input placeholder="username" id="username" type="text">
+            <br>
+            <label>
+                <h2>Enter Contest Link:</h2>
+            </label>
+            <input placeholder="contest link" id="contest_id" type="tex">
+            <br>
+            <button id="find" onclick="find_AIR()"><b id="ft">Find AIR</b></button>
+            <h1 id="out">______</h1>
+        </div>
+    </div>
+    <br>
+    <div class="dis">
+        <h1>Disclaimers:</h1>
+        <ul>
+            <li>
+                <h2>If Finder returns "Not Found" then these might be the cases:</h2>
+                <ol>
+                    <li>
+                        <h3>entered user's Global Rank is Not under 700</h3>
+                    </li>
+                    <li>
+                        <h3>entered user did not participated in the contest</h3>
+                    </li>
+                </ol>
+            </li>
+        </ul>
+    </div>
+    <br>
+    <div class="connection">
+        <h1>
+            Contribute:<a href="https://github.com/Aniket-debug" target="_blank"><img id="github"
+                    src="https://image.freepik.com/free-icon/github-logo-silhouette-in-a-square_318-54633.jpg"></a>
+        </h1>
+        <h1>
+            Connect:<a href="https://www.linkedin.com/in/aniket-agarwal-226a551b1/" target="_blank"><img id="linkedin"
+                    src="https://tse2.mm.bing.net/th?id=OIP.8IxSTRR_RjmMtUAT7nAT7gHaHa&pid=Api&P=0"></a>
+        </h1>
+    </div>
+    <script src="find.js"></script>
+</body>
+
+</html>
