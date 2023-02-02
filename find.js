@@ -21,8 +21,14 @@ async function find_AIR() {
 
     let rank = 0;
 
-    for (let i = 1; i <= 5000; i += 600) {
-        let response = await fetch("https://codeforces.com/api/contest.standings?contestId=" + contestId + "&from=" + i + "&count=600&showUnofficial=false");
+    for (let i = 1; i <= 10000; i += 600) {
+        let response = await fetch(`https://codeforces.com/api/contest.standings?contestId=${contestId}&from=${i}&count=600&showUnofficial=false`);
+
+        if (!(response.status >= 200 && response.status <= 299)) {
+            document.getElementById("out").innerHTML = "Error Occured Server is unavailable refresh and try again or try after some time";
+            return;
+        }
+
         response = await response.json();
 
         let userinfo = "https://codeforces.com/api/user.info?handles=";
@@ -31,13 +37,19 @@ async function find_AIR() {
             userinfo += user.party.members[0].handle + ';';
 
         response = await fetch(userinfo);
+
+        if (!(response.status >= 200 && response.status <= 299)) {
+            document.getElementById("out").innerHTML = "Error Occured Server is unavailable refresh and try again or try after some time";
+            return;
+        }
+
         response = await response.json();
 
         for (let user of response.result) {
             if (user.country === "India") {
                 rank++;
                 if (user.handle == username) {
-                    document.getElementById("out").innerHTML = username + " Your AIR is: " + rank;
+                    document.getElementById("out").innerHTML = user.handle + " Your AIR is: " + rank;
                     return;
                 }
             }
