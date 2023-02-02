@@ -37,7 +37,7 @@ async function find_AIR() {
             if (user.country === "India") {
                 rank++;
                 if (user.handle == username) {
-                    document.getElementById("out").innerHTML = user.firstName + " Your AIR is: " + rank;
+                    document.getElementById("out").innerHTML = username + " Your AIR is: " + rank;
                     return;
                 }
             }
