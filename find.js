@@ -7,6 +7,11 @@ async function find_AIR() {
     let contestId = document.getElementById("contest_id").value;
     contestId = contestId.trim();
 
+    if(username===""){
+        document.getElementById("out").innerHTML = "Enter valid username";
+        return;
+    }
+
     if (contestId.slice(0, 31) != "https://codeforces.com/contest/") {
         document.getElementById("out").innerHTML = "Entered Link is not correct";
         return;

@@ -1,75 +1,68 @@
 body {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    background-color: beige;
+  margin: 0px;
+  padding: 0px;
 }
 
-.fheading,
-.sheading,
-.input,
-.output {
-    padding: 1%;
-    background-color: rgb(17, 57, 57);
-    font-size: medium;
-    font-style: oblique;
-    color: beige;
-    text-align: center;
+.social {
+  text-align: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.connection,
-.dis {
-    padding: 1%;
-    background-color: rgb(17, 57, 57);
-    font-size: medium;
-    font-style: oblique;
-    color: beige;
-    text-align: center;
-}
-
-#username,
-#contest_id {
-    padding: 1%;
-    font-size: large;
-    font-style: oblique;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+.fheading{
+  font-size: 20px;
+  font-style: oblique;
+  text-align: center;
 }
 
 #find {
-    padding: 5px 50px;
-    margin-top: 20px;
-    margin-bottom: -10px;
-    border-radius: 5px;
-}
-
-.airmsg {
-    margin-bottom: -10px;
-}
-
-#ft {
-    font-size: large;
-    color: rgb(26, 26, 17);
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-button {
-    cursor: pointer;
+  padding: 5px 50px;
+  margin-top: 10px;
+  border-radius: 5px;
 }
 
 #find:hover {
-    background-color: rgb(132, 125, 127);
-    transition-duration: 0.05s;
-}
-
-input::placeholder {
-    font: 20px/3 sans-serif;
+  transition-duration: 0.05s;
 }
 
 #github,
 #linkedin {
-    margin-left: 20px;
-    margin-right: -3px;
-    margin-top: -3px;
-    margin-bottom: -3px;
-    width: 40px;
-    height: 30px;
-    border-radius: 5px;
+  margin-right: 15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.row {
+  margin-top: 10px !important;
+}
+
+.colp {
+  font-size: 30px;
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+}
+.accordion-body {
+  text-align: left;
+}
+
+.btns{
+    text-align: center !important;
+    padding-bottom: 20px;
+}
+
+.formClass {
+    margin-left: 70px;
+    margin-right: 70px;
+}
+
+.error{
+    font-size: 20px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+}
+
+.social p{
+    font-size: 22px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
