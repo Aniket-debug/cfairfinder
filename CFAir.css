@@ -3,10 +3,15 @@ body {
   padding: 0px;
 }
 
-.social {
+.social,
+.star {
   text-align: center;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.star a{
+  text-decoration: none;
 }
 
 .fheading{
