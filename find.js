@@ -48,7 +48,7 @@ async function find_ACR() {
     let rank = 0;
 
     for (let i = 1; i <= 10000; i += 1000) {
-        const standingsResponse = await fetch(`https://codeforces.com/api/contest.standings?contestId=${contestId}&from=${i}&count=700&showUnofficial=false`);
+        const standingsResponse = await fetch(`https://codeforces.com/api/contest.standings?contestId=${contestId}&from=${i}&count=600&showUnofficial=false`);
         if (!standingsResponse.ok) {
             document.getElementById("out").innerHTML = "Error Occurred: Server is unavailable, please refresh and try again or try after some time";
             return;
@@ -87,4 +87,4 @@ async function find_ACR() {
         }
     }
     document.getElementById("out").innerHTML = "Not Found";
-}      
+}
