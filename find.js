@@ -1,74 +1,90 @@
-async function find_AIR() {
+async function find_ACR() {
+    document.getElementById("out").innerHTML = "Loading ...";
+    const username = document.getElementById("username").value.trim();
+    const contestLink = document.getElementById("contest_id").value.trim();
 
-    document.getElementById("out").innerHTML = "Loading..";
-
-    let username = document.getElementById("username").value;
-    username = username.trim();
-    let contestId = document.getElementById("contest_id").value;
-    contestId = contestId.trim();
-
-    if(username===""){
-        document.getElementById("out").innerHTML = "Enter valid username";
+    // 1.checking if entered link is correct or not
+    if (!contestLink.startsWith("https://codeforces.com/contest/")) {
+        document.getElementById("out").innerHTML = "Entered Contest Link is not valid";
         return;
     }
 
-    if (contestId.slice(0, 31) != "https://codeforces.com/contest/") {
-        document.getElementById("out").innerHTML = "Entered Link is not correct";
+    const contestId = contestLink.slice(31).match(/^\d+/)[0];
+
+    const userDataResponse = await fetch(`https://codeforces.com/api/user.info?handles=${username}`);
+
+    // 2.checking if entered username is valid or not
+    if (!userDataResponse.ok) {
+        document.getElementById("out").innerHTML = "Entered username is not valid";
         return;
     }
-    contestId = contestId.slice(31);
 
-    let l = 0;
+    const userData = await userDataResponse.json();
 
-    while ('0' <= contestId[l] && contestId[l] <= '9') l++;
+    const countryName = userData.result[0]?.country;
 
-    contestId = contestId.slice(0, l);
+
+    // 3.checking if entered username has mention there country in it's profile or not
+    if (!countryName) {
+        document.getElementById("out").innerHTML = `${username} did not mention it's country name in their profile`;
+        return;
+    }
+
+    const availResponse = await fetch(`https://codeforces.com/api/contest.standings?contestId=${contestId}&showUnofficial=false&handles=${username}`);
+    const hasParticipated = await availResponse.json();
+
+    // 4.checking if entered username participated in the entered contest or not
+    if (hasParticipated.result.rows.length == 0) {
+        document.getElementById("out").innerHTML = `${username} did not participated in that contest`;
+        return;
+    }
+
+    // 5.checking if entered username's Rank is under 10000
+    if (hasParticipated.result.rows[0].rank > 10000) {
+        document.getElementById("out").innerHTML = `${username} your Global Rank is ${hasParticipated.result.rows[0].rank} which is not under 10,000`;
+        return;
+    }
 
     let rank = 0;
 
-    for (let i = 1; i <= 10000; i += 600) {
-        let response = await fetch(`https://codeforces.com/api/contest.standings?contestId=${contestId}&from=${i}&count=600&showUnofficial=false`);
+    for (let i = 1; i <= 10000; i += 1000) {
+        const standingsResponse = await fetch(`https://codeforces.com/api/contest.standings?contestId=${contestId}&from=${i}&count=700&showUnofficial=false`);
+        if (!standingsResponse.ok) {
+            document.getElementById("out").innerHTML = "Error Occurred: Server is unavailable, please refresh and try again or try after some time";
+            return;
+        }
 
-        if (!(response.status >= 200 && response.status <= 299)) {
+        const standingsData = await standingsResponse.json();
+        const userHandles = standingsData.result.rows.map(row => row.party.members[0].handle).join(";");
+
+
+
+        const userInfoResponse = await fetch(`https://codeforces.com/api/user.info?handles=${userHandles}`);
+
+        if (!userInfoResponse.ok) {
+            console.log("hits");
+            document.getElementById("out").innerHTML = "Error Occurred: Server is unavailable, please refresh and try again or try after some time";
+            return;
+        }
+        if (!(userInfoResponse.status >= 200 && userInfoResponse.status <= 299)) {
             document.getElementById("out").innerHTML = "Error Occured Server is unavailable refresh and try again or try after some time";
             return;
         }
 
-        response = await response.json();
+        const userInfoData = await userInfoResponse.json();
 
-        let userinfo = "https://codeforces.com/api/user.info?handles=";
 
-        for (let user of response.result.rows)
-            userinfo += user.party.members[0].handle + ';';
 
-        response = await fetch(userinfo);
-
-        if (!(response.status >= 200 && response.status <= 299)) {
-            document.getElementById("out").innerHTML = "Error Occured Server is unavailable refresh and try again or try after some time";
-            return;
-        }
-
-        response = await response.json();
-
-        for (let user of response.result) {
-            if (user.country === "India") {
+        for (let user of userInfoData.result) {
+            if (user.country === countryName) {
                 rank++;
+
                 if (user.handle == username) {
-                    document.getElementById("out").innerHTML = user.handle + " Your AIR is: " + rank;
+                    document.getElementById("out").innerHTML = `${user.handle} Your All ${countryName} Rank is: ${rank}`;
                     return;
                 }
             }
-            if (user.handle == username) {
-                if (user.country == undefined)
-                    document.getElementById("out").innerHTML = "Username you entered didn't mention his/her country";
-                else
-                    document.getElementById("out").innerHTML = "Username you entered is not from India";
-                return;
-            }
-
         }
-
     }
-
     document.getElementById("out").innerHTML = "Not Found";
-}
+}      
